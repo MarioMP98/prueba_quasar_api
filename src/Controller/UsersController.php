@@ -2,14 +2,25 @@
 
 namespace App\Controller;
 
+use App\Service\UsersService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class UsersController extends AbstractController
 {
-    public function test(): JsonResponse
+    protected $service;
+
+    public function __construct(UsersService $service)
     {
 
-        return new JsonResponse("Hola, mundo");
+        $this->service = $service;
+    }
+
+    public function create(): JsonResponse
+    {
+
+        $response = $this->service->create();
+
+        return new JsonResponse($response);
     }
 }

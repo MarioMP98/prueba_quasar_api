@@ -5,6 +5,6 @@ controllers:
     type: attribute
 
 test:
-    path:       /api/test
-    controller: App\Controller\UsersController::test
-    methods:    GET
+    path:       /api/create
+    controller: App\Controller\UsersController::create
+    methods:    POST
