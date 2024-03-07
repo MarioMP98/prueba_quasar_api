@@ -4,7 +4,12 @@ controllers:
         namespace: App\Controller
     type: attribute
 
-test:
-    path:       /api/create
+user_find_all:
+    path:       /api/user/find_all
+    controller: App\Controller\UsersController::findAll
+    methods:    GET
+
+user_create:
+    path:       /api/user/create
     controller: App\Controller\UsersController::create
     methods:    POST

@@ -15,9 +15,32 @@ class UserService
         $this->repository = $repository;
     }
 
-    public function create(): null|User
+    public function findAll(): array
+    {
+        $arrayCollection = array();
+
+        $users = $this->repository->findAll();
+
+        foreach($users as $item) {
+            $arrayCollection[] = array(
+                'id' => $item->getId(),
+                'nombre' => $item->getNombre(),
+                'email' => $item->getEmail(),
+                'password' => $item->getPassword(),
+                'created_at' => $item->getCreatedAt(),
+                'updated_at' => $item->getUpdatedAt(),
+                'deleted_at' => $item->getDeletedAt()
+            );
+        }
+
+        return $arrayCollection;
+
+        
+    }
+
+    public function create($params, $em): User
     {
 
-        return $this->repository->create(1);
+        return $this->repository->create($params, $em);
     }
 }

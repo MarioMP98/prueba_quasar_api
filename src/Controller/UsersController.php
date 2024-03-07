@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Service\UserService;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 class UsersController extends AbstractController
 {
@@ -16,11 +18,19 @@ class UsersController extends AbstractController
         $this->service = $service;
     }
 
-    public function create(): JsonResponse
+    public function findAll(): JsonResponse
     {
 
-        $response = $this->service->create();
+        $users = $this->service->findAll();
 
-        return new JsonResponse($response);
+        return new JsonResponse($users);
+    }
+
+    public function create(Request $request, EntityManagerInterface $entityManager): JsonResponse
+    {
+
+        $user = $this->service->create($request->request->all(), $entityManager);
+
+        return new JsonResponse('Se ha creado un nuevo usuario con la id: ' . $user->getId());
     }
 }

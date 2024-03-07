@@ -4,14 +4,10 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\SoftDeleteable\Traits\SoftDeleteable;
-use Gedmo\Timestampable\Traits\Timestampable;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User
 {
-    use Timestampable;
-    use SoftDeleteable;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -26,6 +22,15 @@ class User
 
     #[ORM\Column(length: 255)]
     private ?string $password = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTime $createdAt;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTime $updatedAt;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTime $deletedAt;
 
 
     public function getId(): ?int
@@ -67,6 +72,47 @@ class User
         $this->password = $password;
 
         return $this;
+    }
+
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTime $createdAt): static
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTime $updatedAt): static
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getDeletedAt()
+    {
+        return $this->deletedAt;
+    }
+
+    public function setDeletedAt(?\DateTime $deletedAt = null): static
+    {
+        $this->deletedAt = $deletedAt;
+
+        return $this;
+    }
+
+    public function isDeleted()
+    {
+        return null !== $this->deletedAt;
     }
 
 }
