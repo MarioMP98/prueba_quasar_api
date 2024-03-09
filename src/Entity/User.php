@@ -3,6 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -23,14 +26,22 @@ class User
     #[ORM\Column(length: 255)]
     private ?string $password = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?\DateTime $createdAt;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $createdAt;
 
-    #[ORM\Column(nullable: true)]
-    private ?\DateTime $updatedAt;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $updatedAt;
 
-    #[ORM\Column(nullable: true)]
-    private ?\DateTime $deletedAt;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $deletedAt;
+
+    #[ORM\OneToMany(targetEntity: Annotation::class, mappedBy: 'usuario')]
+    private Collection $annotations;
+
+    public function __construct()
+    {
+        $this->annotations = new ArrayCollection();
+    }
 
 
     public function getId(): ?int
@@ -74,36 +85,36 @@ class User
         return $this;
     }
 
-    public function getCreatedAt()
+    public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTime $createdAt): static
+    public function setCreatedAt(\DateTimeInterface $createdAt): static
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt()
+    public function getUpdatedAt(): ?\DateTimeInterface
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTime $updatedAt): static
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
 
         return $this;
     }
 
-    public function getDeletedAt()
+    public function getDeletedAt(): ?\DateTimeInterface
     {
         return $this->deletedAt;
     }
 
-    public function setDeletedAt(?\DateTime $deletedAt = null): static
+    public function setDeletedAt(?\DateTimeInterface $deletedAt = null): static
     {
         $this->deletedAt = $deletedAt;
 
@@ -113,6 +124,34 @@ class User
     public function isDeleted()
     {
         return null !== $this->deletedAt;
+    }
+
+    /**
+     * @return Collection<int, Annotation>
+     */
+    public function getAnnotations(): Collection
+    {
+        return $this->annotations;
+    }
+
+    public function addAnnotation(Annotation $annotation): static
+    {
+        if (!$this->annotations->contains($annotation)) {
+            $this->annotations->add($annotation);
+            $annotation->setUsuario($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAnnotation(Annotation $annotation): static
+    {
+        if ($this->annotations->removeElement($annotation) && $annotation->getUsuario() === $this) {
+
+            $annotation->setUsuario(null);
+        }
+
+        return $this;
     }
 
 }

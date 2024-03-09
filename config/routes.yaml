@@ -28,3 +28,28 @@ user_delete:
     defaults:
         soft: 0
     methods:    DELETE
+
+
+########## NOTAS ##########
+
+annotation_list:
+    path:       /api/annotation/list
+    controller: App\Controller\AnnotationController::list
+    methods:    GET
+
+annotation_create:
+    path:       /api/annotation/create
+    controller: App\Controller\AnnotationController::create
+    methods:    POST
+
+annotation_update:
+    path:       /api/annotation/update/{id}
+    controller: App\Controller\AnnotationController::update
+    methods:    POST
+
+annotation_delete:
+    path:       /api/annotation/delete/{id}/{soft}
+    controller: App\Controller\AnnotationController::delete
+    defaults:
+        soft: 0
+    methods:    DELETE

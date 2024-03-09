@@ -42,7 +42,6 @@ class UsersController extends AbstractController
 
     }
 
-
     public function delete($id, $soft): JsonResponse
     {
         $this->service->delete($id, $soft);

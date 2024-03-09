@@ -34,7 +34,7 @@ class UserRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
-    public function create($params)
+    public function create($params): User
     {
         $user = new User();
 
@@ -72,7 +72,6 @@ class UserRepository extends ServiceEntityRepository
 
         return $user;
     }
-
 
     public function delete($id, $soft): void
     {
