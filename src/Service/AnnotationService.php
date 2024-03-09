@@ -4,18 +4,24 @@ namespace App\Service;
 
 use App\Entity\Annotation;
 use App\Repository\AnnotationRepository;
+use App\Repository\CategoryRepository;
 use App\Repository\UserRepository;
 
 class AnnotationService
 {
     protected $repository;
     protected $userRepository;
+    protected $categoryRepository;
 
-    public function __construct(AnnotationRepository $repository, UserRepository $userRepository)
-    {
+    public function __construct(
+        AnnotationRepository $repository,
+        UserRepository $userRepository,
+        CategoryRepository $categoryRepository
+    ) {
 
         $this->repository = $repository;
         $this->userRepository = $userRepository;
+        $this->categoryRepository = $categoryRepository;
     }
 
     public function list(): array

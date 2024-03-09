@@ -2,33 +2,28 @@
 
 namespace App\Entity;
 
-use App\Repository\AnnotationRepository;
+use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: AnnotationRepository::class)]
-class Annotation
+#[ORM\Entity(repositoryClass: CategoryRepository::class)]
+class Category
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'annotations')]
-    private ?User $usuario = null;
-
-    #[ORM\ManyToMany(targetEntity: Category::class, mappedBy: 'annotations')]
-    private Collection $categories;
-
-    public function __construct()
-    {
-        $this->categories = new ArrayCollection();
-    }
+    #[ORM\ManyToMany(targetEntity: Annotation::class, inversedBy: 'categories')]
+    private Collection $annotations;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $nota = null;
+    private ?string $nombre = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $descripcion = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $createdAt = null;
@@ -39,58 +34,60 @@ class Annotation
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $deletedAt = null;
 
+    public function __construct()
+    {
+        $this->annotations = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getUsuario(): ?User
-    {
-        return $this->usuario;
-    }
-
-    public function setUsuario(?User $usuario): static
-    {
-        $this->usuario = $usuario;
-
-        return $this;
-    }
-
     /**
-     * @return Collection<int, Category>
+     * @return Collection<int, Annotation>
      */
-    public function getCategories(): Collection
+    public function getAnnotations(): Collection
     {
-        return $this->categories;
+        return $this->annotations;
     }
 
-    public function addCategory(Category $category): static
+    public function addAnnotation(Annotation $annotation): static
     {
-        if (!$this->categories->contains($category)) {
-            $this->categories->add($category);
-            $category->addAnnotation($this);
+        if (!$this->annotations->contains($annotation)) {
+            $this->annotations->add($annotation);
         }
 
         return $this;
     }
 
-    public function removeCategory(Category $category): static
+    public function removeAnnotation(Annotation $annotation): static
     {
-        if ($this->categories->removeElement($category)) {
-            $category->removeAnnotation($this);
-        }
+        $this->annotations->removeElement($annotation);
 
         return $this;
     }
 
-    public function getNota(): ?string
+    public function getNombre(): ?string
     {
-        return $this->nota;
+        return $this->nombre;
     }
 
-    public function setNota(?string $nota): static
+    public function setNombre(?string $nombre): static
     {
-        $this->nota = $nota;
+        $this->nombre = $nombre;
+
+        return $this;
+    }
+
+    public function getDescripcion(): ?string
+    {
+        return $this->descripcion;
+    }
+
+    public function setDescripcion(?string $descripcion): static
+    {
+        $this->descripcion = $descripcion;
 
         return $this;
     }

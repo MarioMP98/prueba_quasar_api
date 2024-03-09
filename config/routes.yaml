@@ -53,3 +53,28 @@ annotation_delete:
     defaults:
         soft: 0
     methods:    DELETE
+
+
+########## CATEGORIAS ##########
+
+category_list:
+    path:       /api/category/list
+    controller: App\Controller\CategoryController::list
+    methods:    GET
+
+category_create:
+    path:       /api/category/create
+    controller: App\Controller\CategoryController::create
+    methods:    POST
+
+category_update:
+    path:       /api/category/update/{id}
+    controller: App\Controller\CategoryController::update
+    methods:    POST
+
+category_delete:
+    path:       /api/category/delete/{id}/{soft}
+    controller: App\Controller\CategoryController::delete
+    defaults:
+        soft: 0
+    methods:    DELETE

@@ -30,7 +30,7 @@ class AnnotationController extends AbstractController
 
         $annotation = $this->service->create($request->request->all());
 
-        return new JsonResponse('Se ha creado un nueva nota con la id: ' . $annotation->getId());
+        return new JsonResponse('Se ha creado una nueva nota con la id: ' . $annotation->getId());
     }
 
     public function update($id, Request $request): JsonResponse
