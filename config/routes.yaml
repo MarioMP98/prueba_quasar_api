@@ -4,12 +4,27 @@ controllers:
         namespace: App\Controller
     type: attribute
 
-user_find_all:
-    path:       /api/user/find_all
-    controller: App\Controller\UsersController::findAll
+
+########## USUARIOS ##########
+
+user_list:
+    path:       /api/user/list
+    controller: App\Controller\UsersController::list
     methods:    GET
 
 user_create:
     path:       /api/user/create
     controller: App\Controller\UsersController::create
     methods:    POST
+
+user_update:
+    path:       /api/user/update/{id}
+    controller: App\Controller\UsersController::update
+    methods:    POST
+
+user_delete:
+    path:       /api/user/delete/{id}/{soft}
+    controller: App\Controller\UsersController::delete
+    defaults:
+        soft: 0
+    methods:    DELETE

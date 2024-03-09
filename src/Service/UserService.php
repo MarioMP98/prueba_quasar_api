@@ -15,11 +15,11 @@ class UserService
         $this->repository = $repository;
     }
 
-    public function findAll(): array
+    public function list(): array
     {
         $arrayCollection = array();
 
-        $users = $this->repository->findAll();
+        $users = $this->repository->list();
 
         foreach($users as $item) {
             $arrayCollection[] = array(
@@ -38,9 +38,21 @@ class UserService
         
     }
 
-    public function create($params, $em): User
+    public function create($params): User
     {
 
-        return $this->repository->create($params, $em);
+        return $this->repository->create($params);
+    }
+
+    public function update($id, $params): User
+    {
+
+        return $this->repository->update($id, $params);
+    }
+
+    public function delete($id, $soft): void
+    {
+
+        $this->repository->delete($id, $soft);
     }
 }
