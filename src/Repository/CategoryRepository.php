@@ -34,6 +34,19 @@ class CategoryRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
+    public function findIn(array $ids)
+    {
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQuery(
+            'SELECT c
+                FROM App\Entity\Category c
+                WHERE c.id IN (:ids)'
+        )->setParameter('ids', $ids);
+
+        return $query->getResult();
+    }
+
     public function create($params): Category
     {
         $user = new Category();

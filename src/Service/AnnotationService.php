@@ -6,9 +6,12 @@ use App\Entity\Annotation;
 use App\Repository\AnnotationRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\UserRepository;
+use App\Traits\Parser;
 
 class AnnotationService
 {
+    use Parser;
+
     protected $repository;
     protected $userRepository;
     protected $categoryRepository;
@@ -24,47 +27,46 @@ class AnnotationService
         $this->categoryRepository = $categoryRepository;
     }
 
-    public function list(): array
+    public function list($onlyOld): array
     {
-        $arrayCollection = array();
 
-        $annotations = $this->repository->list();
+        $annotations = $this->repository->list($onlyOld);
 
-        foreach($annotations as $item) {
-            $user = $item->getUsuario();
-
-            $arrayCollection[] = array(
-                'id' => $item->getId(),
-                'usuario' => $user->getNombre() ?? '',
-                'nota' => $item->getNota(),
-                'created_at' => $item->getCreatedAt(),
-                'updated_at' => $item->getUpdatedAt(),
-                'deleted_at' => $item->getDeletedAt()
-            );
-        }
-
-        return $arrayCollection;
-
-        
+        return $this->parseAnnotations($annotations);
     }
 
     public function create($params): Annotation
     {
-        $user = $this->userRepository->find($params['usuario']);
+        [$user, $categories] = $this->getUserAndCategories($params);
 
-        return $this->repository->create($params, $user);
+        return $this->repository->create($params, $user, $categories);
     }
 
     public function update($id, $params): Annotation
     {
-        $user = $this->userRepository->find($params['usuario']);
+        [$user, $categories] = $this->getUserAndCategories($params);
 
-        return $this->repository->update($id, $params, $user);
+        return $this->repository->update($id, $params, $user, $categories);
     }
 
     public function delete($id, $soft): void
     {
 
         $this->repository->delete($id, $soft);
+    }
+
+    private function getUserAndCategories($params) {
+        $user = null;
+        $categories = array();
+
+        if (isset($params['categorias'])) {
+            $categories = $this->categoryRepository->findIn($params['categorias']);
+        }
+
+        if (isset($params['usuario'])) {
+            $user = $this->userRepository->find($params['usuario']);
+        }
+
+        return [$user, $categories];
     }
 }

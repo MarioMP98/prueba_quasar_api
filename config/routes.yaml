@@ -33,8 +33,10 @@ user_delete:
 ########## NOTAS ##########
 
 annotation_list:
-    path:       /api/annotation/list
+    path:       /api/annotation/list/{onlyOld}
     controller: App\Controller\AnnotationController::list
+    defaults:
+        onlyOld: 0
     methods:    GET
 
 annotation_create:

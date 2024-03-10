@@ -4,9 +4,12 @@ namespace App\Service;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Traits\Parser;
 
 class UserService
 {
+    use Parser;
+
     protected $repository;
 
     public function __construct(UserRepository $repository)
@@ -17,23 +20,10 @@ class UserService
 
     public function list(): array
     {
-        $arrayCollection = array();
 
         $users = $this->repository->list();
 
-        foreach($users as $item) {
-            $arrayCollection[] = array(
-                'id' => $item->getId(),
-                'nombre' => $item->getNombre(),
-                'email' => $item->getEmail(),
-                'password' => $item->getPassword(),
-                'created_at' => $item->getCreatedAt(),
-                'updated_at' => $item->getUpdatedAt(),
-                'deleted_at' => $item->getDeletedAt()
-            );
-        }
-
-        return $arrayCollection;
+        return $this->parseUsers($users);
 
         
     }

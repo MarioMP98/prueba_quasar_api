@@ -21,22 +21,32 @@ class AnnotationRepository extends ServiceEntityRepository
         parent::__construct($registry, Annotation::class);
     }
 
-    public function list()
+    public function list($onlyOld)
     {
         $entityManager = $this->getEntityManager();
+        $sql = 'SELECT a
+            FROM App\Entity\Annotation a
+            WHERE a.deletedAt IS NULL';
 
-        $query = $entityManager->createQuery(
-            'SELECT a
-                FROM App\Entity\Annotation a
-                WHERE a.deletedAt IS NULL'
-        );
+        if ($onlyOld) {
+            $date = new \DateTime();
+            date_modify($date,'-1 week');
+
+            $sql .= "AND a.createdAt <= '" . $date->format("Y-m-d H:i:s") . "'";
+        }
+
+        $query = $entityManager->createQuery($sql);
 
         return $query->getResult();
     }
 
-    public function create($params, $user): Annotation
+    public function create($params, $user, $categories): Annotation
     {
         $annotation = new Annotation();
+
+        foreach ($categories as $item) {
+            $annotation->addCategory($item);
+        }
 
         $annotation->setUsuario($user);
         $annotation->setNota($params['nota']);
@@ -49,13 +59,25 @@ class AnnotationRepository extends ServiceEntityRepository
         return $annotation;
     }
 
-    public function update($id, $params, $user): Annotation
+    public function update($id, $params, $user, $categories): Annotation
     {
         $entityManager = $this->getEntityManager();
         $annotation = $this->find($id);
 
         if ($user) {
             $annotation->setUsuario($user);
+        }
+
+        if ($categories) {
+            $currentCategories = $annotation->getCategories();
+
+            foreach ($currentCategories as $item) {
+                $annotation->removeCategory($item);
+            }
+
+            foreach ($categories as $item) {
+                $annotation->addCategory($item);
+            }
         }
 
         if(isset($params['nota'])) {

@@ -4,9 +4,12 @@ namespace App\Service;
 
 use App\Entity\Category;
 use App\Repository\CategoryRepository;
+use App\Traits\Parser;
 
 class CategoryService
 {
+    use Parser;
+
     protected $repository;
 
     public function __construct(CategoryRepository $repository)
@@ -17,24 +20,10 @@ class CategoryService
 
     public function list(): array
     {
-        $arrayCollection = array();
 
         $categories = $this->repository->list();
 
-        foreach($categories as $item) {
-            $arrayCollection[] = array(
-                'id' => $item->getId(),
-                'nombre' => $item->getNombre(),
-                'descripcion' => $item->getDescripcion(),
-                'created_at' => $item->getCreatedAt(),
-                'updated_at' => $item->getUpdatedAt(),
-                'deleted_at' => $item->getDeletedAt()
-            );
-        }
-
-        return $arrayCollection;
-
-        
+        return $this->parseCategories($categories);
     }
 
     public function create($params): Category

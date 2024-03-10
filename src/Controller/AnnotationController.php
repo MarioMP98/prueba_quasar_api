@@ -17,10 +17,10 @@ class AnnotationController extends AbstractController
         $this->service = $service;
     }
 
-    public function list(): JsonResponse
+    public function list($onlyOld): JsonResponse
     {
 
-        $annotations = $this->service->list();
+        $annotations = $this->service->list($onlyOld);
 
         return new JsonResponse($annotations);
     }
