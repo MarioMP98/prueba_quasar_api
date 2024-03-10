@@ -19,24 +19,42 @@ class UsersController extends AbstractController
 
     public function list(): JsonResponse
     {
+        try {
 
-        $users = $this->service->list();
+            $users = $this->service->list();
+
+        } catch (\Exception) {
+
+            return new JsonResponse("Se ha producido un error al recuperar los usuarios");
+        }
 
         return new JsonResponse($users);
     }
 
     public function create(Request $request): JsonResponse
     {
+        try {
 
-        $user = $this->service->create($request->request->all());
+            $user = $this->service->create($request->request->all());
+
+        } catch (\Exception) {
+
+            return new JsonResponse("Se ha producido un error al crear el usuario");
+        }
 
         return new JsonResponse('Se ha creado un nuevo usuario con la id: ' . $user->getId());
     }
 
     public function update($id, Request $request): JsonResponse
     {
+        try {
 
-        $user = $this->service->update($id, $request->request->all());
+            $user = $this->service->update($id, $request->request->all());
+
+        } catch (\Exception) {
+
+            return new JsonResponse("Se ha producido un error al modificar el usuario");
+        }
 
         return new JsonResponse('Se ha modificado el usuario con la id: ' . $user->getId());
 
@@ -44,7 +62,14 @@ class UsersController extends AbstractController
 
     public function delete($id, $soft): JsonResponse
     {
-        $this->service->delete($id, $soft);
+        try {
+
+            $this->service->delete($id, $soft);
+
+        } catch (\Exception) {
+
+            return new JsonResponse("Se ha producido un error al eliminar el usuario");
+        }
 
         return new JsonResponse('Se ha eliminado correctamente el usuario');
     }
