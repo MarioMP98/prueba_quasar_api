@@ -12,21 +12,20 @@ class UserService
 
     protected $repository;
 
+
     public function __construct(UserRepository $repository)
     {
-
         $this->repository = $repository;
     }
 
+
     public function list(): array
     {
-
         $users = $this->repository->list();
 
         return $this->parseUsers($users);
-
-        
     }
+
 
     public function create($params): User
     {
@@ -34,15 +33,17 @@ class UserService
         return $this->repository->create($params);
     }
 
-    public function update($id, $params): User
+
+    public function update($id, $params): User|null
     {
 
         return $this->repository->update($id, $params);
     }
 
-    public function delete($id, $soft): void
+
+    public function delete($id, $soft): User|null
     {
 
-        $this->repository->delete($id, $soft);
+        return $this->repository->delete($id, $soft);
     }
 }

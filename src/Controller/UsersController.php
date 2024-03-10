@@ -11,11 +11,12 @@ class UsersController extends AbstractController
 {
     protected $service;
 
+
     public function __construct(UserService $service)
     {
-
         $this->service = $service;
     }
+
 
     public function list(): JsonResponse
     {
@@ -31,6 +32,7 @@ class UsersController extends AbstractController
         return new JsonResponse($users);
     }
 
+
     public function create(Request $request): JsonResponse
     {
         try {
@@ -45,6 +47,7 @@ class UsersController extends AbstractController
         return new JsonResponse('Se ha creado un nuevo usuario con la id: ' . $user->getId());
     }
 
+
     public function update($id, Request $request): JsonResponse
     {
         try {
@@ -56,19 +59,30 @@ class UsersController extends AbstractController
             return new JsonResponse("Se ha producido un error al modificar el usuario");
         }
 
+        if (!$user) {
+
+            return new JsonResponse('No se ha encontrado el usuario a modificar');
+        }
+
         return new JsonResponse('Se ha modificado el usuario con la id: ' . $user->getId());
 
     }
+
 
     public function delete($id, $soft): JsonResponse
     {
         try {
 
-            $this->service->delete($id, $soft);
+            $user = $this->service->delete($id, $soft);
 
         } catch (\Exception) {
 
             return new JsonResponse("Se ha producido un error al eliminar el usuario");
+        }
+
+        if (!$user) {
+
+            return new JsonResponse('No se ha encontrado el usuario a eliminar');
         }
 
         return new JsonResponse('Se ha eliminado correctamente el usuario');

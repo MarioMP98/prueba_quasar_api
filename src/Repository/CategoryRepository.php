@@ -16,12 +16,14 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CategoryRepository extends ServiceEntityRepository
 {
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Category::class);
     }
 
-    public function list()
+
+    public function list(): array
     {
         $entityManager = $this->getEntityManager();
 
@@ -34,7 +36,8 @@ class CategoryRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
-    public function findIn(array $ids)
+
+    public function findIn(array $ids): array
     {
         $entityManager = $this->getEntityManager();
 
@@ -47,25 +50,10 @@ class CategoryRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
+
     public function create($params): Category
     {
-        $user = new Category();
-
-        $user->setNombre($params['nombre']);
-        $user->setDescripcion($params['descripcion']);
-        $user->setCreatedAt(new \DateTime());
-
-        $entityManager = $this->getEntityManager();
-        $entityManager->persist($user);
-        $entityManager->flush();
-
-        return $user;
-    }
-
-    public function update($id, $params): Category
-    {
-        $entityManager = $this->getEntityManager();
-        $category = $this->find($id);
+        $category = new Category();
 
         if(isset($params['nombre'])) {
             $category->setNombre($params['nombre']);
@@ -74,25 +62,57 @@ class CategoryRepository extends ServiceEntityRepository
         if(isset($params['descripcion'])) {
             $category->setDescripcion($params['descripcion']);
         }
-        
-        $category->setUpdatedAt(new \DateTime());
+
+        $category->setCreatedAt(new \DateTime());
+
+        $entityManager = $this->getEntityManager();
+        $entityManager->persist($category);
         $entityManager->flush();
 
         return $category;
     }
 
-    public function delete($id, $soft): void
+
+    public function update($id, $params): Category|null
     {
         $entityManager = $this->getEntityManager();
         $category = $this->find($id);
 
-        if ($soft) {
-            $category->setDeletedAt(new \DateTime());
-        } else {
-            $entityManager->remove($category);
+        if ($category) {
+            
+            if(isset($params['nombre'])) {
+                $category->setNombre($params['nombre']);
+            }
+    
+            if(isset($params['descripcion'])) {
+                $category->setDescripcion($params['descripcion']);
+            }
+            
+            $category->setUpdatedAt(new \DateTime());
+            $entityManager->flush();
+        }
+
+        return $category;
+    }
+
+
+    public function delete($id, $soft): Category|null
+    {
+        $entityManager = $this->getEntityManager();
+        $category = $this->find($id);
+
+        if ($category) {
+
+            if ($soft) {
+                $category->setDeletedAt(new \DateTime());
+            } else {
+                $entityManager->remove($category);
+            }
+
+            $entityManager->flush();
         }
         
-        $entityManager->flush();
+        return $category;
     }
 
 }

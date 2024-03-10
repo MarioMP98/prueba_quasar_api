@@ -11,11 +11,12 @@ class CategoryController extends AbstractController
 {
     protected $service;
 
+
     public function __construct(CategoryService $service)
     {
-
         $this->service = $service;
     }
+
 
     public function list(): JsonResponse
     {
@@ -31,6 +32,7 @@ class CategoryController extends AbstractController
         return new JsonResponse($categories);
     }
 
+
     public function create(Request $request): JsonResponse
     {
         try {
@@ -45,6 +47,7 @@ class CategoryController extends AbstractController
         return new JsonResponse('Se ha creado una nueva categoría con la id: ' . $category->getId());
     }
 
+
     public function update($id, Request $request): JsonResponse
     {
         try {
@@ -56,19 +59,30 @@ class CategoryController extends AbstractController
             return new JsonResponse("Se ha producido un error al modificar la categoría");
         }
 
+        if (!$category) {
+
+            return new JsonResponse('No se ha encontrado la categoría a modificar');
+        }
+
         return new JsonResponse('Se ha modificado la categoría con la id: ' . $category->getId());
 
     }
+
 
     public function delete($id, $soft): JsonResponse
     {
         try {
 
-            $this->service->delete($id, $soft);
+            $category = $this->service->delete($id, $soft);
 
         } catch (\Exception) {
 
             return new JsonResponse("Se ha producido un error al eliminar la categoría");
+        }
+
+        if (!$category) {
+
+            return new JsonResponse('No se ha encontrado la categoría a eliminar');
         }
         
 

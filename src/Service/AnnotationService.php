@@ -16,24 +16,25 @@ class AnnotationService
     protected $userRepository;
     protected $categoryRepository;
 
+
     public function __construct(
         AnnotationRepository $repository,
         UserRepository $userRepository,
         CategoryRepository $categoryRepository
     ) {
-
         $this->repository = $repository;
         $this->userRepository = $userRepository;
         $this->categoryRepository = $categoryRepository;
     }
 
+
     public function list($onlyOld): array
     {
-
         $annotations = $this->repository->list($onlyOld);
 
         return $this->parseAnnotations($annotations);
     }
+
 
     public function create($params): Annotation
     {
@@ -42,20 +43,24 @@ class AnnotationService
         return $this->repository->create($params, $user, $categories);
     }
 
-    public function update($id, $params): Annotation
+
+    public function update($id, $params): Annotation|null
     {
         [$user, $categories] = $this->getUserAndCategories($params);
 
         return $this->repository->update($id, $params, $user, $categories);
     }
 
-    public function delete($id, $soft): void
+
+    public function delete($id, $soft): Annotation|null
     {
 
-        $this->repository->delete($id, $soft);
+        return $this->repository->delete($id, $soft);
     }
 
-    private function getUserAndCategories($params) {
+
+    private function getUserAndCategories($params): array
+    {
         $user = null;
         $categories = array();
 

@@ -16,12 +16,14 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class AnnotationRepository extends ServiceEntityRepository
 {
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Annotation::class);
     }
 
-    public function list($onlyOld)
+
+    public function list($onlyOld): array
     {
         $entityManager = $this->getEntityManager();
         $sql = 'SELECT a
@@ -40,6 +42,7 @@ class AnnotationRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
+
     public function create($params, $user, $categories): Annotation
     {
         $annotation = new Annotation();
@@ -48,8 +51,14 @@ class AnnotationRepository extends ServiceEntityRepository
             $annotation->addCategory($item);
         }
 
-        $annotation->setUsuario($user);
-        $annotation->setNota($params['nota']);
+        if ($user) {
+            $annotation->setUsuario($user);
+        }
+
+        if(isset($params['nota'])) {
+            $annotation->setNota($params['nota']);
+        }
+
         $annotation->setCreatedAt(new \DateTime());
 
         $entityManager = $this->getEntityManager();
@@ -59,49 +68,65 @@ class AnnotationRepository extends ServiceEntityRepository
         return $annotation;
     }
 
-    public function update($id, $params, $user, $categories): Annotation
+
+    public function update($id, $params, $user, $categories): Annotation|null
     {
         $entityManager = $this->getEntityManager();
         $annotation = $this->find($id);
 
-        if ($user) {
-            $annotation->setUsuario($user);
-        }
+        if($annotation) {
 
-        if ($categories) {
-            $currentCategories = $annotation->getCategories();
-
-            foreach ($currentCategories as $item) {
-                $annotation->removeCategory($item);
+            if ($user) {
+                $annotation->setUsuario($user);
             }
-
-            foreach ($categories as $item) {
-                $annotation->addCategory($item);
+    
+            if ($categories) {
+                $this->updateCategories($categories, $annotation);
             }
+    
+            if(isset($params['nota'])) {
+                $annotation->setNota($params['nota']);
+            }
+            
+            $annotation->setUpdatedAt(new \DateTime());
+            $entityManager->flush();
         }
-
-        if(isset($params['nota'])) {
-            $annotation->setNota($params['nota']);
-        }
-        
-        $annotation->setUpdatedAt(new \DateTime());
-        $entityManager->flush();
 
         return $annotation;
     }
 
-    public function delete($id, $soft): void
+
+    public function delete($id, $soft): Annotation|null
     {
         $entityManager = $this->getEntityManager();
-        $user = $this->find($id);
+        $annotation = $this->find($id);
 
-        if ($soft) {
-            $user->setDeletedAt(new \DateTime());
-        } else {
-            $entityManager->remove($user);
+        if($annotation) {
+
+            if ($soft) {
+                $annotation->setDeletedAt(new \DateTime());
+            } else {
+                $entityManager->remove($annotation);
+            }
+            
+            $entityManager->flush();
         }
-        
-        $entityManager->flush();
+
+        return $annotation;
+    }
+
+
+    private function updateCategories($categories, $annotation): void
+    {
+        $currentCategories = $annotation->getCategories();
+
+        foreach ($currentCategories as $item) {
+            $annotation->removeCategory($item);
+        }
+
+        foreach ($categories as $item) {
+            $annotation->addCategory($item);
+        }
     }
 
 }

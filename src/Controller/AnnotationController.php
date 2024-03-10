@@ -11,11 +11,12 @@ class AnnotationController extends AbstractController
 {
     protected $service;
 
+
     public function __construct(AnnotationService $service)
     {
-
         $this->service = $service;
     }
+
 
     public function list($onlyOld): JsonResponse
     {
@@ -31,6 +32,7 @@ class AnnotationController extends AbstractController
         return new JsonResponse($annotations);
     }
 
+
     public function create(Request $request): JsonResponse
     {
         try {
@@ -45,6 +47,7 @@ class AnnotationController extends AbstractController
         return new JsonResponse('Se ha creado una nueva nota con la id: ' . $annotation->getId());
     }
 
+
     public function update($id, Request $request): JsonResponse
     {
         try {
@@ -56,19 +59,30 @@ class AnnotationController extends AbstractController
             return new JsonResponse("Se ha producido un error al modificar la nota");
         }
 
+        if (!$annotation) {
+
+            return new JsonResponse('No se ha encontrado la nota a modificar');
+        }
+
         return new JsonResponse('Se ha modificado la nota con la id: ' . $annotation->getId());
 
     }
+
 
     public function delete($id, $soft): JsonResponse
     {
         try {
 
-            $this->service->delete($id, $soft);
+            $annotation = $this->service->delete($id, $soft);
 
         } catch (\Exception) {
 
             return new JsonResponse("Se ha producido un error al eliminar la nota");
+        }
+
+        if (!$annotation) {
+
+            return new JsonResponse('No se ha encontrado la nota a eliminar');
         }
 
         return new JsonResponse('Se ha eliminado correctamente la nota');

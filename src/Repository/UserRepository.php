@@ -16,12 +16,14 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class UserRepository extends ServiceEntityRepository
 {
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);
     }
 
-    public function list()
+
+    public function list(): array
     {
         $entityManager = $this->getEntityManager();
 
@@ -34,26 +36,10 @@ class UserRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
+
     public function create($params): User
     {
         $user = new User();
-
-        $user->setNombre($params['nombre']);
-        $user->setEmail($params['email']);
-        $user->setPassword($params['password']);
-        $user->setCreatedAt(new \DateTime());
-
-        $entityManager = $this->getEntityManager();
-        $entityManager->persist($user);
-        $entityManager->flush();
-
-        return $user;
-    }
-
-    public function update($id, $params): User
-    {
-        $entityManager = $this->getEntityManager();
-        $user = $this->find($id);
 
         if(isset($params['nombre'])) {
             $user->setNombre($params['nombre']);
@@ -66,24 +52,60 @@ class UserRepository extends ServiceEntityRepository
         if(isset($params['password'])) {
             $user->setPassword($params['password']);
         }
-        
-        $user->setUpdatedAt(new \DateTime());
+
+        $user->setCreatedAt(new \DateTime());
+
+        $entityManager = $this->getEntityManager();
+        $entityManager->persist($user);
         $entityManager->flush();
 
         return $user;
     }
 
-    public function delete($id, $soft): void
+
+    public function update($id, $params): User|null
     {
         $entityManager = $this->getEntityManager();
         $user = $this->find($id);
 
-        if ($soft) {
-            $user->setDeletedAt(new \DateTime());
-        } else {
-            $entityManager->remove($user);
+        if ($user) {
+
+            if(isset($params['nombre'])) {
+                $user->setNombre($params['nombre']);
+            }
+    
+            if(isset($params['email'])) {
+                $user->setEmail($params['email']);
+            }
+    
+            if(isset($params['password'])) {
+                $user->setPassword($params['password']);
+            }
+            
+            $user->setUpdatedAt(new \DateTime());
+            $entityManager->flush();
         }
-        
-        $entityManager->flush();
+
+        return $user;
+    }
+
+
+    public function delete($id, $soft): User|null
+    {
+        $entityManager = $this->getEntityManager();
+        $user = $this->find($id);
+
+        if ($user) {
+
+            if ($soft) {
+                $user->setDeletedAt(new \DateTime());
+            } else {
+                $entityManager->remove($user);
+            }
+            
+            $entityManager->flush();
+        }
+
+        return $user;
     }
 }

@@ -12,19 +12,20 @@ class CategoryService
 
     protected $repository;
 
+
     public function __construct(CategoryRepository $repository)
     {
-
         $this->repository = $repository;
     }
 
+
     public function list(): array
     {
-
         $categories = $this->repository->list();
 
         return $this->parseCategories($categories);
     }
+
 
     public function create($params): Category
     {
@@ -32,15 +33,17 @@ class CategoryService
         return $this->repository->create($params);
     }
 
-    public function update($id, $params): Category
+
+    public function update($id, $params): Category|null
     {
 
         return $this->repository->update($id, $params);
     }
 
-    public function delete($id, $soft): void
+
+    public function delete($id, $soft): Category|null
     {
 
-        $this->repository->delete($id, $soft);
+        return $this->repository->delete($id, $soft);
     }
 }

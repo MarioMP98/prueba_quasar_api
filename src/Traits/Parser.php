@@ -4,10 +4,10 @@ namespace App\Traits;
 
 trait Parser
 {
-
     protected const DATE_FORMAT = 'd/m/Y H:i:s';
 
-    private function parseUsers($users)
+
+    private function parseUsers($users): array
     {
         $arrayCollection = array();
 
@@ -18,7 +18,8 @@ trait Parser
         return $arrayCollection;
     }
 
-    private function parseUser($item)
+
+    private function parseUser($item): array
     {
         
         return array(
@@ -32,7 +33,8 @@ trait Parser
         );
     }
 
-    private function parseAnnotations($annotations)
+
+    private function parseAnnotations($annotations): array
     {
         $arrayCollection = array();
 
@@ -45,7 +47,8 @@ trait Parser
         return $arrayCollection;
     }
 
-    private function parseAnnotation($item)
+
+    private function parseAnnotation($item): array
     {
         $user = $item->getUsuario();
 
@@ -59,6 +62,7 @@ trait Parser
         );
     }
 
+
     private function parseCategories($categories): array
     {
         $arrayCollection = array();
@@ -71,7 +75,9 @@ trait Parser
         return $arrayCollection;
     }
 
-    private function parseCategory($item) {
+
+    private function parseCategory($item): array
+    {
 
         return array(
             'id' => $item->getId(),
@@ -83,7 +89,9 @@ trait Parser
         );
     }
 
-    public function formatDateTime($datetime) {
+
+    public function formatDateTime($datetime): string|null
+    {
 
         return $datetime ? $datetime->format($this::DATE_FORMAT) : null;
     }
