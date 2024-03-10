@@ -19,6 +19,11 @@ class UserService
     }
 
 
+    /**
+     * Recupera todos los usuarios
+     *
+     * @return array
+     */
     public function list(): array
     {
         $users = $this->repository->list();
@@ -27,6 +32,12 @@ class UserService
     }
 
 
+    /**
+     * Crea un usuario nuevo
+     *
+     * @param array $params Contiene los parametros a guardar
+     * @return User
+     */
     public function create($params): User
     {
 
@@ -34,6 +45,13 @@ class UserService
     }
 
 
+    /**
+     * Actualiza un usuario existente
+     *
+     * @param int $id La id del usuario a modificar
+     * @param array $params Contiene los parametros a guardar
+     * @return User|null
+     */
     public function update($id, $params): User|null
     {
 
@@ -41,6 +59,13 @@ class UserService
     }
 
 
+    /**
+     * Elimina un usuario existente
+     *
+     * @param int $id La id del usuario a eliminar
+     * @param boolean $soft Determina si se realiza o no un SoftDelete
+     * @return User|null
+     */
     public function delete($id, $soft): User|null
     {
 

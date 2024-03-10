@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Annotation;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -23,6 +24,12 @@ class AnnotationRepository extends ServiceEntityRepository
     }
 
 
+    /**
+     * Recupera todas las notas
+     *
+     * @param boolean $onlyOld Sirve para que solo traiga las notas creadas hace más de 7 días
+     * @return array
+     */
     public function list($onlyOld): array
     {
         $entityManager = $this->getEntityManager();
@@ -43,6 +50,14 @@ class AnnotationRepository extends ServiceEntityRepository
     }
 
 
+    /**
+     * Crea una nota nueva
+     *
+     * @param array $params Contiene los parametros a guardar
+     * @param User $user El usuario a asignar a la nota
+     * @param array $categories Las categorías a asignar a la nota
+     * @return Annotation
+     */
     public function create($params, $user, $categories): Annotation
     {
         $annotation = new Annotation();
@@ -69,6 +84,15 @@ class AnnotationRepository extends ServiceEntityRepository
     }
 
 
+    /**
+     * Actualiza una nota existente
+     *
+     * @param int $id La id de la nota a modificar
+     * @param array $params Contiene los parametros a guardar
+     * @param User $user El usuario a asignar a la nota
+     * @param array $categories Las categorías a asignar a la nota
+     * @return Annotation|null
+     */
     public function update($id, $params, $user, $categories): Annotation|null
     {
         $entityManager = $this->getEntityManager();
@@ -96,6 +120,13 @@ class AnnotationRepository extends ServiceEntityRepository
     }
 
 
+    /**
+     * Elimina una nota existente
+     *
+     * @param int $id La id de la nota a eliminar
+     * @param boolean $soft Determina si se realiza o no un SoftDelete
+     * @return Annotation|null
+     */
     public function delete($id, $soft): Annotation|null
     {
         $entityManager = $this->getEntityManager();
@@ -116,6 +147,12 @@ class AnnotationRepository extends ServiceEntityRepository
     }
 
 
+    /**
+     * Elimina una nota existente
+     *
+     * @param array $categories Las categorías a asignar a la nota
+     * @param Annotation $annotation El objeto de la nota a actualizar
+     */
     private function updateCategories($categories, $annotation): void
     {
         $currentCategories = $annotation->getCategories();

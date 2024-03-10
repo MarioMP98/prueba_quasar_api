@@ -28,6 +28,12 @@ class AnnotationService
     }
 
 
+    /**
+     * Recupera todas las notas
+     *
+     * @param boolean $onlyOld Sirve para que solo traiga las notas creadas hace más de 7 días
+     * @return array
+     */
     public function list($onlyOld): array
     {
         $annotations = $this->repository->list($onlyOld);
@@ -36,6 +42,12 @@ class AnnotationService
     }
 
 
+    /**
+     * Crea una nota nueva
+     *
+     * @param array $params Contiene los parametros a guardar
+     * @return Annotation
+     */
     public function create($params): Annotation
     {
         [$user, $categories] = $this->getUserAndCategories($params);
@@ -44,6 +56,13 @@ class AnnotationService
     }
 
 
+    /**
+     * Actualiza una nota existente
+     *
+     * @param int $id La id de la nota a modificar
+     * @param array $params Contiene los parametros a guardar
+     * @return Annotation|null
+     */
     public function update($id, $params): Annotation|null
     {
         [$user, $categories] = $this->getUserAndCategories($params);
@@ -52,6 +71,13 @@ class AnnotationService
     }
 
 
+    /**
+     * Elimina una nota existente
+     *
+     * @param int $id La id de la nota a eliminar
+     * @param boolean $soft Determina si se realiza o no un SoftDelete
+     * @return Annotation|null
+     */
     public function delete($id, $soft): Annotation|null
     {
 
@@ -59,6 +85,12 @@ class AnnotationService
     }
 
 
+    /**
+     * Recupera los usuarios y las categorías correspondientes a los ids recibidos
+     *
+     * @param array $params Contiene los parametros a guardar
+     * @return array
+     */
     private function getUserAndCategories($params): array
     {
         $user = null;

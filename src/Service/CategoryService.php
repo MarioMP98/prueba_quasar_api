@@ -19,6 +19,11 @@ class CategoryService
     }
 
 
+    /**
+     * Recupera todas las categorías
+     *
+     * @return array
+     */
     public function list(): array
     {
         $categories = $this->repository->list();
@@ -27,6 +32,12 @@ class CategoryService
     }
 
 
+    /**
+     * Crea una categoría nueva
+     *
+     * @param array $params Contiene los parametros a guardar
+     * @return Category
+     */
     public function create($params): Category
     {
 
@@ -34,6 +45,13 @@ class CategoryService
     }
 
 
+    /**
+     * Actualiza una categoría existente
+     *
+     * @param int $id La id de la categoría a modificar
+     * @param array $params Contiene los parametros a guardar
+     * @return Category|null
+     */
     public function update($id, $params): Category|null
     {
 
@@ -41,6 +59,13 @@ class CategoryService
     }
 
 
+    /**
+     * Elimina una categoría existente
+     *
+     * @param int $id La id de la categoría a eliminar
+     * @param boolean $soft Determina si se realiza o no un SoftDelete
+     * @return Category|null
+     */
     public function delete($id, $soft): Category|null
     {
 

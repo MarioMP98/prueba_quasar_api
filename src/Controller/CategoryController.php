@@ -18,6 +18,11 @@ class CategoryController extends AbstractController
     }
 
 
+    /**
+     * Recupera todas las categorías
+     *
+     * @return JsonResponse
+     */
     public function list(): JsonResponse
     {
         try {
@@ -33,6 +38,12 @@ class CategoryController extends AbstractController
     }
 
 
+    /**
+     * Crea una categoría nueva
+     *
+     * @param Request $request Contiene los parametros a guardar
+     * @return JsonResponse
+     */
     public function create(Request $request): JsonResponse
     {
         try {
@@ -48,6 +59,13 @@ class CategoryController extends AbstractController
     }
 
 
+    /**
+     * Actualiza una categoría existente
+     *
+     * @param int $id La id de la categoría a modificar
+     * @param Request $request Contiene los parametros a guardar
+     * @return JsonResponse
+     */
     public function update($id, Request $request): JsonResponse
     {
         try {
@@ -69,6 +87,13 @@ class CategoryController extends AbstractController
     }
 
 
+    /**
+     * Elimina una categoría existente
+     *
+     * @param int $id La id de la categoría a eliminar
+     * @param boolean $soft Determina si se realiza o no un SoftDelete
+     * @return JsonResponse
+     */
     public function delete($id, $soft): JsonResponse
     {
         try {

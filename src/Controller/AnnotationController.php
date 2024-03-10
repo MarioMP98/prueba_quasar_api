@@ -18,6 +18,12 @@ class AnnotationController extends AbstractController
     }
 
 
+    /**
+     * Recupera todas las notas
+     *
+     * @param boolean $onlyOld Sirve para que solo traiga las notas creadas hace más de 7 días
+     * @return JsonResponse
+     */
     public function list($onlyOld): JsonResponse
     {
         try {
@@ -33,6 +39,12 @@ class AnnotationController extends AbstractController
     }
 
 
+    /**
+     * Crea una nota nueva
+     *
+     * @param Request $request Contiene los parametros a guardar
+     * @return JsonResponse
+     */
     public function create(Request $request): JsonResponse
     {
         try {
@@ -48,6 +60,13 @@ class AnnotationController extends AbstractController
     }
 
 
+    /**
+     * Actualiza una nota existente
+     *
+     * @param int $id La id de la nota a modificar
+     * @param Request $request Contiene los parametros a guardar
+     * @return JsonResponse
+     */
     public function update($id, Request $request): JsonResponse
     {
         try {
@@ -69,6 +88,13 @@ class AnnotationController extends AbstractController
     }
 
 
+    /**
+     * Elimina una nota existente
+     *
+     * @param int $id La id de la nota a eliminar
+     * @param boolean $soft Determina si se realiza o no un SoftDelete
+     * @return JsonResponse
+     */
     public function delete($id, $soft): JsonResponse
     {
         try {

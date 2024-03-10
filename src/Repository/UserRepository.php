@@ -23,6 +23,11 @@ class UserRepository extends ServiceEntityRepository
     }
 
 
+    /**
+     * Recupera todos los usuarios
+     *
+     * @return array
+     */
     public function list(): array
     {
         $entityManager = $this->getEntityManager();
@@ -37,6 +42,12 @@ class UserRepository extends ServiceEntityRepository
     }
 
 
+    /**
+     * Crea un usuario nuevo
+     *
+     * @param array $params Contiene los parametros a guardar
+     * @return User
+     */
     public function create($params): User
     {
         $user = new User();
@@ -63,6 +74,13 @@ class UserRepository extends ServiceEntityRepository
     }
 
 
+    /**
+     * Actualiza un usuario existente
+     *
+     * @param int $id La id del usuario a modificar
+     * @param array $params Contiene los parametros a guardar
+     * @return User|null
+     */
     public function update($id, $params): User|null
     {
         $entityManager = $this->getEntityManager();
@@ -90,6 +108,13 @@ class UserRepository extends ServiceEntityRepository
     }
 
 
+    /**
+     * Elimina un usuario existente
+     *
+     * @param int $id La id del usuario a eliminar
+     * @param boolean $soft Determina si se realiza o no un SoftDelete
+     * @return User|null
+     */
     public function delete($id, $soft): User|null
     {
         $entityManager = $this->getEntityManager();

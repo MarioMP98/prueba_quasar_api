@@ -23,6 +23,11 @@ class CategoryRepository extends ServiceEntityRepository
     }
 
 
+    /**
+     * Recupera todas las categorías
+     *
+     * @return array
+     */
     public function list(): array
     {
         $entityManager = $this->getEntityManager();
@@ -37,6 +42,12 @@ class CategoryRepository extends ServiceEntityRepository
     }
 
 
+    /**
+     * Recupera las categorias correspondientes a las ids
+     *
+     * @param array $ids Las ids de las categorías que se quieren recuperar
+     * @return array
+     */
     public function findIn(array $ids): array
     {
         $entityManager = $this->getEntityManager();
@@ -51,6 +62,12 @@ class CategoryRepository extends ServiceEntityRepository
     }
 
 
+    /**
+     * Crea una categoría nueva
+     *
+     * @param array $params Contiene los parametros a guardar
+     * @return Category
+     */
     public function create($params): Category
     {
         $category = new Category();
@@ -73,6 +90,13 @@ class CategoryRepository extends ServiceEntityRepository
     }
 
 
+    /**
+     * Actualiza una categoría existente
+     *
+     * @param int $id La id de la categoría a modificar
+     * @param array $params Contiene los parametros a guardar
+     * @return Category|null
+     */
     public function update($id, $params): Category|null
     {
         $entityManager = $this->getEntityManager();
@@ -96,6 +120,13 @@ class CategoryRepository extends ServiceEntityRepository
     }
 
 
+    /**
+     * Elimina una categoría existente
+     *
+     * @param int $id La id de la categoría a eliminar
+     * @param boolean $soft Determina si se realiza o no un SoftDelete
+     * @return Category|null
+     */
     public function delete($id, $soft): Category|null
     {
         $entityManager = $this->getEntityManager();

@@ -18,6 +18,11 @@ class UsersController extends AbstractController
     }
 
 
+    /**
+     * Recupera todos los usuarios
+     *
+     * @return JsonResponse
+     */
     public function list(): JsonResponse
     {
         try {
@@ -33,6 +38,12 @@ class UsersController extends AbstractController
     }
 
 
+    /**
+     * Crea un usuario nuevo
+     *
+     * @param Request $request Contiene los parametros a guardar
+     * @return JsonResponse
+     */
     public function create(Request $request): JsonResponse
     {
         try {
@@ -48,6 +59,13 @@ class UsersController extends AbstractController
     }
 
 
+    /**
+     * Actualiza un usuario existente
+     *
+     * @param int $id La id del usuario a modificar
+     * @param Request $request Contiene los parametros a guardar
+     * @return JsonResponse
+     */
     public function update($id, Request $request): JsonResponse
     {
         try {
@@ -69,6 +87,13 @@ class UsersController extends AbstractController
     }
 
 
+    /**
+     * Elimina un usuario existente
+     *
+     * @param int $id La id del usuario a eliminar
+     * @param boolean $soft Determina si se realiza o no un SoftDelete
+     * @return JsonResponse
+     */
     public function delete($id, $soft): JsonResponse
     {
         try {
