@@ -32,7 +32,7 @@ class AnnotationRepository extends ServiceEntityRepository
             $date = new \DateTime();
             date_modify($date,'-1 week');
 
-            $sql .= "AND a.createdAt <= '" . $date->format("Y-m-d H:i:s") . "'";
+            $sql .= " AND a.createdAt <= '" . $date->format("Y-m-d H:i:s") . "'";
         }
 
         $query = $entityManager->createQuery($sql);
